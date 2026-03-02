@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <title>Crear / Editar Nómina</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+
+<body class="container mt-4">
+
+    <h2 id="titulo">Crear Nómina</h2>
+
+    <div class="card p-3">
+
+        <label>Empleado</label>
+        <select id="empleadoId" class="form-control mb-2"></select>
+
+        <input id="bonificaciones" class="form-control mb-2" placeholder="Bonificaciones">
+        <input id="deducciones" class="form-control mb-2" placeholder="Deducciones">
+        <input id="fechaPago" type="date" class="form-control mb-2">
+
+        <div class="text-center mt-3">
+            <button onclick="guardar()" class="btn btn-primary me-2">Guardar</button>
+            <a href="nomina.html" class="btn btn-secondary">Volver</a>
+        </div>
+
+    </div>
+
+    <script>
+        const API = "http://localhost:8080";
+        const TOKEN = "Bearer 123456";
+
+        const params = new URLSearchParams(window.location.search);
+        const id = params.get("id");
+
+        function headers() {
+            return {
+                "Content-Type": "application/json",
+                "Authorization": TOKEN
+            }
+        }
+
+        async function cargarEmpleados() {
+
+            const response = await fetch(API + "/api/empleados?page=0&size=1000", {
+                headers: headers()
+            });
+
+            const data = await response.json();
+
+            empleadoId.innerHTML = "";
+
+            data.content.forEach(e => {
+                empleadoId.innerHTML += `
+            <option value="${e.id}">
+                ${e.nombre} - ${e.cargo}
+            </option>
+        `;
+            });
+        }
+
+        async function cargarNomina() {
+
+            if (!id) return;
+
+            titulo.innerText = "Editar Nómina";
+
+            const response = await fetch(API + "/api/nomina/" + id, {
+                headers: headers()
+            });
+
+            const n = await response.json();
+
+            bonificaciones.value = n.bonificaciones;
+            deducciones.value = n.deducciones;
+            fechaPago.value = n.fechaPago;
+            empleadoId.value = n.empleado.id;
+        }
+
+        async function init() {
+            await cargarEmpleados();
+            await cargarNomina();
+        }
+
+        function guardar() {
+
+            const metodo = id ? "PUT" : "POST";
+            const url = id ? API + "/api/nomina/" + id : API + "/api/nomina";
+
+            fetch(url, {
+                method: metodo,
+                headers: headers(),
+                body: JSON.stringify({
+                    bonificaciones: parseFloat(bonificaciones.value),
+                    deducciones: parseFloat(deducciones.value),
+                    fechaPago: fechaPago.value,
+                    empleado: {
+                        id: parseInt(empleadoId.value)
+                    }
+                })
+            }).then(() => window.location.href = "nomina.html");
+        }
+
+        init();
+    </script>
+
+</body>
+
+</html>
