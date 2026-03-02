@@ -17,11 +17,13 @@ Sistema web desarrollado con Spring Boot que permite gestionar empleados y admin
 
 Facilitar el control administrativo del personal y automatizar el proceso de cálculo de pagos en una empresa. 
 
-# Crear Base de Datos MySQL
+# Configuración del proyecto
+
+## Crear Base de Datos MySQL
 
 CREATE DATABASE nomina_db;
 
-# Verificar que application.properties tenga configurado:
+## Verificar que application.properties tenga configurado:
 
 spring.application.name=nomina
 
@@ -39,20 +41,20 @@ spring.jpa.properties.hibernate.format_sql=true
 
 server.port=8080
 
-# Generar archivo .jar
+## Generar archivo .jar
 
 mvn clean package
 
-# Ejecutar el .jar
+## Ejecutar el .jar
 
 java -jar target/nomina-0.0.1-SNAPSHOT.jar
 
-# Seguridad
+## Seguridad
 
 Todas las peticiones requieren el siguiente header obligatorio:
 
 Authorization: Bearer 123456
 
-# 👨‍💻 Autor
+## 👨‍💻 Autor
 
 Pablo Andres Aroca Garcia
