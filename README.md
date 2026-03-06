@@ -2,6 +2,9 @@
 
 Sistema web desarrollado con Spring Boot que permite gestionar empleados y administrar su nómina de manera eficiente.
 
+![img.png](img.png)
+
+![img_1.png](img_1.png)
 ## Funcionalidades
 
 - Registro, edición y eliminación de empleados.
